@@ -13,8 +13,8 @@ Mix.install([
 Load binary trained model and architecture
 
 ```elixir
-filename_w = "models/x_ray_model_cnn_weights_v4_2"
-filename_m = "models/x_ray_model_cnn_model_v4_2"
+filename_w = "elixir-ml-example/x_ray_model_cnn_weights"
+filename_m = "elixir-ml-example/x_ray_model_cnn_model"
 
 {:ok, testt} = File.read(filename_w)
 trained_model = :erlang.binary_to_term(testt)
@@ -26,7 +26,7 @@ model = :erlang.binary_to_term(testt)
 Load and preprocess test data
 
 ```elixir
-{:ok, test_images_bin} = File.read("data/x-ray-test-ubyte")
+{:ok, test_images_bin} = File.read("elixir-ml-example/x-ray-test-ubyte")
 
 <<_::32, n_test::32, n_rows::32, n_cols::32, test_data::binary>> = test_images_bin
 
@@ -40,7 +40,7 @@ x_test =
 Load and preprocess test labels
 
 ```elixir
-{:ok, test_labels_bin} = File.read("data/x-ray-test-labels-ubyte")
+{:ok, test_labels_bin} = File.read("elixir-ml-example/x-ray-test-labels-ubyte")
 
 <<_::32, _::32, test_label::binary>> = test_labels_bin
 ```
@@ -61,15 +61,6 @@ require Axon
 result =
   model
   |> Axon.predict(trained_model.params, x_test, compiler: EXLA)
-```
-
-Binary cross entropy result
-
-```elixir
-# result =
-#  Nx.round(result)
-#  |> Nx.reshape({624, 1})
-#  |> Nx.equal(Nx.tensor(Enum.to_list(0..1)))
 ```
 
 Categorial cross entropy result

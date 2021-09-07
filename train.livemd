@@ -2,12 +2,20 @@
 
 ## Dependencies
 
+```elixir
+Mix.install([
+  {:exla, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "exla"},
+  {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
+  {:axon, "~> 0.1.0-dev", github: "elixir-nx/axon"}
+])
+```
+
 Load data from a binary file and performing some preprocessing
 
 << 4 bits - magic number, 4 bits - number of images, 4 bit - height, 4 bits - width, :: data>>
 
 ```elixir
-{:ok, train_images_bin} = File.read("pneumonia/x-ray-train-ubyte")
+{:ok, train_images_bin} = File.read("elixir-ml-example/x-ray-train-ubyte")
 
 <<_::32, n_train::32, n_rows::32, n_cols::32, train_data::binary>> = train_images_bin
 
@@ -23,7 +31,7 @@ Same for labels
 << 4 bits - magic number, 4 bits - number of labels, :: data>>
 
 ```elixir
-{:ok, train_labels_bin} = File.read("pneumonia/x-ray-train-labels-ubyte")
+{:ok, train_labels_bin} = File.read("elixir-ml-example/x-ray-train-labels-ubyte")
 
 <<_::32, n_labels::32, train_label::binary>> = train_labels_bin
 
@@ -88,15 +96,15 @@ Train and save model
 * save model and architecture as binary file
 
 ```elixir
-echops = 30
+epochs = 30
 
 trained_model =
   model
   |> Axon.Training.step(:categorical_cross_entropy, Axon.Optimizers.adamw(0.000005))
-  |> Axon.Training.train(x, y, epochs: echops, compiler: EXLA)
+  |> Axon.Training.train(x, y, epochs: epochs, compiler: EXLA)
 
-filename_w = "models/x_ray_model_cnn_weights_v4_2"
-filename_m = "models/x_ray_model_cnn_model_v4_2"
+filename_w = "elixir-ml-example/x_ray_model_cnn_weights"
+filename_m = "elixir-ml-example/x_ray_model_cnn_model"
 
 tranied_model_binary = :erlang.term_to_binary(trained_model)
 {:ok, file} = File.open(filename_w, [:write])
