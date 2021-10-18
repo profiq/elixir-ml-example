@@ -3,6 +3,7 @@
 In this repository we demonstrate the use of various machine learning tools 
 offered by the Elixir ecosystem. Using these tools, we build, train and test a simple
 convolutional neural network for detecting pneumonia in x-ray chest scans.
+You can learn more about this repositor in our [blog post](https://www.profiq.com/deep-learning-in-elixir-with-axon/) focused on machine learning with Elixir.
 
 Following Elixir libraries and projects are used:
 
