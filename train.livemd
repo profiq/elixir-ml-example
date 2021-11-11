@@ -100,8 +100,8 @@ epochs = 30
 
 trained_model =
   model
-  |> Axon.Training.step(:categorical_cross_entropy, Axon.Optimizers.adamw(0.000005))
-  |> Axon.Training.train(x, y, epochs: epochs, compiler: EXLA)
+  |> Axon.Loop.trainer(:categorical_cross_entropy, Axon.Optimizers.adamw(0.000005))
+  |> Axon.Loop.run(Stream.zip(x, y), epochs: epochs, compiler: EXLA)
 
 filename_w = "elixir-ml-example/x_ray_model_cnn_weights"
 filename_m = "elixir-ml-example/x_ray_model_cnn_model"
